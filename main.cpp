@@ -6,12 +6,9 @@
 #include <stdio.h>
 #include <string>
 #include <fstream>
-#include <json.hpp>
 
 using namespace cv;
-using json = nlohmann::json;
 
-std::vector<Object> parseJSON(std::string str);
 geom::Point<int> searchByColor(cv::InputArray hsv, cv::OutputArray out, Scalar lower, Scalar upper);
 
 int main(int argc, char** argv){
@@ -94,36 +91,6 @@ int main(int argc, char** argv){
     // the camera will be deinitialized automatically in VideoCapture destructor
     return 0;
 }
-
-std::vector<Object> parseJSON(std::string str){
-    json j = json::parse(str);
-    std::vector<Object> objs;
-
-    for (json::iterator it = j.begin(); it != j.end(); ++it) {
-        if(it.value()["class_id"] == 0){
-            int top, left, width, height, class_id, object_id;
-
-            top = it.value()["box"]["top"];
-            left = it.value()["box"]["left"];
-            height = it.value()["box"]["width"];
-            width = it.value()["box"]["height"];
-
-            class_id = it.value()["class_id"];
-            object_id = it.value()["object_id"];
-
-            int center_top, center_left;
-
-            center_top = (top + height/2);
-            center_left = (left + width/2);
-
-            objs.push_back( Object(class_id, object_id,
-                            geom::Point(center_left, center_top)) );
-        }
-    }
-
-    return objs;
-}
-
 
 geom::Point<int> searchByColor(cv::InputArray hsv, cv::OutputArray out, Scalar lower, Scalar upper){
     cv::Mat filtered, kernel, coord, segmented;
