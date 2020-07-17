@@ -45,7 +45,7 @@ public:
         g = rand() % 256;
         r = rand() % 256;
 
-        kf.init(pos.top, pos.left, 0.05);
+        kf.init(pos.top, pos.left, 0.1);
     }
     Object(int class_id, int id, point_i pos) :   id(id), position(pos), updated(true), class_id(0),
                                         max_dist(MAX_DISS), min_appearance(MIN_APP), valid(false){
